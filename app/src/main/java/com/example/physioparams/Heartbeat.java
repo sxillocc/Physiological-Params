@@ -1,11 +1,17 @@
 package com.example.physioparams;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.hardware.Camera;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.util.Log;
@@ -16,6 +22,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
+import com.example.physioparams.Math.Fft;
 
 import static java.lang.Math.ceil;
 
@@ -52,33 +59,52 @@ public class Heartbeat extends AppCompatActivity {
     public ArrayList<Double> RedAvgList = new ArrayList<Double>();
     public int counter = 0;
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_heartbeat);
+        Log.e("Started","Application started");
 
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            user = extras.getString("Usr");
-            //The key argument here must match that used in the other activity
+        user = "USR";
+
+        Log.e("Checking Permission","Permission check");
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.CAMERA }, 50);
+        }
+        else {
+            next();
+            PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+            wakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK,  "mytag::DoNotDimScreen");
         }
 
-        // XML - Java Connecting
-        preview = findViewById(R.id.preview);
-        previewHolder = preview.getHolder();
-        previewHolder.addCallback(surfaceCallback);
-        previewHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-        ProgHeart = findViewById(R.id.HRPB);
-        ProgHeart.setProgress(0);
+////            previewHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+////            previewHolder.addCallback(surfaceCallback);
 
-        // WakeLock Initialization : Forces the phone to stay On
-        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        wakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK,  "DoNotDimScreen");
+//        }
+
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+    }
+
+    public void next(){
+        Log.e("Permission","Camera Permission granted");
+        try {
+            preview = (SurfaceView) findViewById(R.id.preview);
+            Log.e("preview created", "created");
+            previewHolder = preview.getHolder();
+            Log.e("preview created", "here2");
+            previewHolder.addCallback(surfaceCallback);
+            Log.e("preview created", "here1");
+            previewHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+            ProgHeart = findViewById(R.id.HRPB);
+            ProgHeart.setProgress(0);
+        }catch (Error e){
+            Log.e("error", "error"+e);
+        }
     }
 
     //Wakelock + Open device camera + set orientation to 90 degree
@@ -198,6 +224,9 @@ public class Heartbeat extends AppCompatActivity {
 //                i.putExtra("Usr", user);
 //                startActivity(i);
 //                finish();
+                Log.e("bpm", "beats="+Beats);
+                finish();
+
             }
 
 
@@ -218,10 +247,12 @@ public class Heartbeat extends AppCompatActivity {
         @Override
         public void surfaceCreated(SurfaceHolder holder) {
             try {
+                Log.e("PreviewDemo","Imhere");
                 camera.setPreviewDisplay(previewHolder);
                 camera.setPreviewCallback(previewCallback);
             } catch (Throwable t) {
-                Log.e("PreviewDemo-surfaceCallback", "Exception in setPreviewDisplay()", t);
+                Log.e("PreviewDemo","Exception in setPreviewDisplay()",t);
+//                Log.e("PreviewDemo-surfaceCallback", "Exception in setPreviewDisplay()", t);
             }
         }
 

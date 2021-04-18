@@ -1,4 +1,4 @@
-package com.example.physioparams;
+package com.example.physioparams.Math;
 
 public class Fft {
 
