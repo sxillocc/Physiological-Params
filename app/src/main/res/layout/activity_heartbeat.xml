@@ -7,10 +7,31 @@
     tools:context=".Heartbeat">
 
     <TextView
+        android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Measuring Heartbeat using PPG"
         android:textSize="26dp"
         android:layout_marginLeft="10dp"/>
+
+    <SurfaceView
+        android:id="@+id/preview"
+        android:layout_below="@+id/title"
+        android:layout_width="fill_parent"
+        android:layout_height="250dp"
+        android:layout_weight="1"></SurfaceView>
+
+    <ProgressBar
+        android:id="@+id/HRPB"
+
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_below="@+id/preview"
+        android:layout_marginTop="30dp"
+        android:indeterminate="false"
+        android:max="26"
+        android:progress="1"
+        android:progressDrawable="@drawable/circular_progressbar" />
 
 </RelativeLayout>
