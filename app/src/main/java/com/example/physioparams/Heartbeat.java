@@ -225,8 +225,10 @@ public class Heartbeat extends AppCompatActivity {
 //                startActivity(i);
 //                finish();
                 Log.e("bpm", "beats="+Beats);
+                Intent intent = new Intent(Heartbeat.this,ShowResult.class);
+                intent.putExtra("Heart Rate",Beats);
+                startActivity(intent);
                 finish();
-
             }
 
 
