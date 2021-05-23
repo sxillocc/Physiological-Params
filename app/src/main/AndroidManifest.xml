@@ -17,7 +17,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PhysioParams">
-        <activity android:name=".ShowResult"></activity>
+        <activity android:name=".BloodPressure"></activity>
+        <activity android:name=".GetUserData" />
+        <activity android:name=".ShowResult" />
         <activity android:name=".Heartbeat" />
         <activity android:name=".MainActivity">
             <intent-filter>

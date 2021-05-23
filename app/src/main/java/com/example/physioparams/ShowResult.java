@@ -16,8 +16,24 @@ public class ShowResult extends AppCompatActivity {
         if(intent!=null)
         {
             int HeartRate = intent.getIntExtra("Heart Rate",0);
+            int DP = intent.getIntExtra("DP",0);
+            int SP = intent.getIntExtra("SP",0);
+            int HR = intent.getIntExtra("HR",0);
+
             TextView tv1 = findViewById(R.id.TV1);
-            tv1.setText("Heart Rate: "+HeartRate);
+            TextView tv2 = findViewById(R.id.TV2);
+            TextView tv3 = findViewById(R.id.TV3);
+
+            if(DP == 0)
+            {
+                tv1.setText("Heart Rate: "+HeartRate);
+            }
+            else
+            {
+                tv1.setText("Diastolic BP: "+DP);
+                tv2.setText("Systolic BP: "+SP);
+                tv3.setText("Heart Rate: "+HR);
+            }
         }
     }
 }
