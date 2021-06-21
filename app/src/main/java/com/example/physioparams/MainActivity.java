@@ -18,16 +18,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final Button mHeartbeatButton = findViewById(R.id.heartbeat);
+        //final Button mHeartbeatButton = findViewById(R.id.heartbeat);
         final Button mBPButton = findViewById(R.id.bloodpressure);
 
-        mHeartbeatButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, Heartbeat.class);
-                startActivity(intent);
-            }
-        });
+//        mHeartbeatButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(MainActivity.this, Heartbeat.class);
+//                startActivity(intent);
+//            }
+//        });
 
         mBPButton.setOnClickListener(new View.OnClickListener() {
             @Override

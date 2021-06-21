@@ -30,9 +30,9 @@ public class ShowResult extends AppCompatActivity {
             }
             else
             {
-                tv1.setText("Diastolic BP: "+DP);
-                tv2.setText("Systolic BP: "+SP);
-                tv3.setText("Heart Rate: "+HR);
+                tv1.setText("Heart Rate: "+HR);
+                tv2.setText("Diastolic BP: "+DP);
+                tv3.setText("Systolic BP: "+SP);
             }
         }
     }

@@ -58,7 +58,8 @@ public class BloodPressure extends AppCompatActivity {
     public ArrayList<Double> RedAvgList = new ArrayList<Double>();
     public int counter = 0;
 
-    public int height,weight,age;
+    String name,mobile;
+    public int height,weight,age,gender;
 
     public double Q = 4.5;
     private static int SP = 0, DP = 0;
@@ -71,9 +72,12 @@ public class BloodPressure extends AppCompatActivity {
         Intent intent = getIntent();
         if(intent != null)
         {
+            name = intent.getStringExtra("Name");
+            mobile = intent.getStringExtra("Mobile");
+            age = intent.getIntExtra("Age",0);
             height = intent.getIntExtra("Height",0);
             weight = intent.getIntExtra("Weight",0);
-            age = intent.getIntExtra("Age",0);
+            gender = intent.getIntExtra("Gender",1);
         }
         Log.e("Started","Application started");
 
@@ -184,6 +188,7 @@ public class BloodPressure extends AppCompatActivity {
                 counter = 0;
                 ProgHeart.setProgress(ProgP);
                 processing.set(false);
+                startTime = System.currentTimeMillis();
             }
 
             long endTime = System.currentTimeMillis();

@@ -15,20 +15,20 @@
         android:text="Welcome to Physio Params!"
         android:textSize="30dp"/>
 
-    <Button
-        android:id="@+id/heartbeat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/title"
-        android:layout_centerHorizontal="true"
-        android:text="Heart Beat" />
+<!--    <Button-->
+<!--        android:id="@+id/heartbeat"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@+id/title"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:text="Heart Beat" />-->
 
     <Button
         android:id="@+id/bloodpressure"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/heartbeat"
+        android:layout_below="@+id/title"
         android:layout_centerHorizontal="true"
-        android:text="Blood Pressure"/>
+        android:text="Measure"/>
 
 </RelativeLayout>

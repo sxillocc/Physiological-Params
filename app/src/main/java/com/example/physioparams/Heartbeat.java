@@ -179,6 +179,8 @@ public class Heartbeat extends AppCompatActivity {
             double totalTimeInSecs = (endTime - startTime) / 1000d; //to convert time to seconds
             if (totalTimeInSecs >= 30) { //when 30 seconds of measuring passes do the following " we chose 30 seconds to take half sample since 60 seconds is normally a full sample of the heart beat
 
+                Log.i("Green Size",Integer.toString(GreenAvgList.size()));
+                Log.i("Red Size",Integer.toString(RedAvgList.size()));
                 Double[] Green = GreenAvgList.toArray(new Double[GreenAvgList.size()]);
                 Double[] Red = RedAvgList.toArray(new Double[RedAvgList.size()]);
                 
