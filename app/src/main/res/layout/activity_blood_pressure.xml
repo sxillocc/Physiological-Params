@@ -10,8 +10,8 @@
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Measuring Heartbeat using PPG"
-        android:textSize="26dp"
+        android:text="Measuring Blood Pressure using PPG Signals"
+        android:textSize="20dp"
         android:layout_marginLeft="10dp"/>
 
     <SurfaceView

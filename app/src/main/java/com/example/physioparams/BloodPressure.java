@@ -26,8 +26,7 @@ import com.example.physioparams.Math.Fft;
 
 import static java.lang.Math.ceil;
 
-public class Heartbeat extends AppCompatActivity {
-
+public class BloodPressure extends AppCompatActivity {
     private static final String TAG = "HeartRateMonitor";
     private static final AtomicBoolean processing = new AtomicBoolean(false);
     private SurfaceView preview = null;
@@ -59,11 +58,27 @@ public class Heartbeat extends AppCompatActivity {
     public ArrayList<Double> RedAvgList = new ArrayList<Double>();
     public int counter = 0;
 
+    String name,mobile;
+    public int height,weight,age,gender;
+
+    public double Q = 4.5;
+    private static int SP = 0, DP = 0;
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_heartbeat);
+        setContentView(R.layout.activity_blood_pressure);
+        Intent intent = getIntent();
+        if(intent != null)
+        {
+            name = intent.getStringExtra("Name");
+            mobile = intent.getStringExtra("Mobile");
+            age = intent.getIntExtra("Age",0);
+            height = intent.getIntExtra("Height",0);
+            weight = intent.getIntExtra("Weight",0);
+            gender = intent.getIntExtra("Gender",1);
+        }
         Log.e("Started","Application started");
 
         user = "USR";
@@ -173,17 +188,15 @@ public class Heartbeat extends AppCompatActivity {
                 counter = 0;
                 ProgHeart.setProgress(ProgP);
                 processing.set(false);
+                startTime = System.currentTimeMillis();
             }
 
             long endTime = System.currentTimeMillis();
             double totalTimeInSecs = (endTime - startTime) / 1000d; //to convert time to seconds
             if (totalTimeInSecs >= 30) { //when 30 seconds of measuring passes do the following " we chose 30 seconds to take half sample since 60 seconds is normally a full sample of the heart beat
 
-                Log.i("Green Size",Integer.toString(GreenAvgList.size()));
-                Log.i("Red Size",Integer.toString(RedAvgList.size()));
                 Double[] Green = GreenAvgList.toArray(new Double[GreenAvgList.size()]);
                 Double[] Red = RedAvgList.toArray(new Double[RedAvgList.size()]);
-                
 
                 SamplingFreq = (counter / totalTimeInSecs); //calculating the sampling frequency
 
@@ -219,21 +232,25 @@ public class Heartbeat extends AppCompatActivity {
                 }
 
                 Beats = (int) bufferAvgB;
-            }
 
-            if (Beats != 0) { //if beasts were reasonable stop the loop and send HR with the username to results activity and finish this activity
-//                Intent i = new Intent(HeartRateProcess.this, HeartRateResult.class);
-//                i.putExtra("bpm", Beats);
-//                i.putExtra("Usr", user);
-//                startActivity(i);
-//                finish();
-                Log.e("bpm", "beats="+Beats);
-                Intent intent = new Intent(Heartbeat.this,ShowResult.class);
-                intent.putExtra("Heart Rate",Beats);
+                double ROB = 18.5;
+                double ET = (364.5 - 1.23 * Beats);
+                double BSA = 0.007184 * (Math.pow(weight, 0.425)) * (Math.pow(height, 0.725));
+                double SV = (-6.6 + (0.25 * (ET - 35)) - (0.62 * Beats) + (40.4 * BSA) - (0.51 * age));
+                double PP = SV / ((0.013 * weight - 0.007 * age - 0.004 * Beats) + 1.307);
+                double MPP = Q * ROB;
+
+                SP = (int) (MPP + 3 / 2 * PP);
+                DP = (int) (MPP - PP / 3);
+
+                Log.e("HR","HR="+Beats);
+                Intent intent = new Intent(BloodPressure.this,ShowResult.class);
+                intent.putExtra("DP",DP);
+                intent.putExtra("SP",SP);
+                intent.putExtra("HR",Beats);
                 startActivity(intent);
                 finish();
             }
-
 
             if (RedAvg != 0) { //increment the progresspar
 
