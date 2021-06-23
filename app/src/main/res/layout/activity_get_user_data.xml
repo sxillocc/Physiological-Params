@@ -104,12 +104,44 @@
 
             </RadioGroup>
 
+
+            <EditText
+                android:id="@+id/actualHR"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_below="@+id/radiogroup"
+                android:layout_marginLeft="12dp"
+                android:inputType="textPersonName"
+                android:hint="Actual Heart Rate"/>
+
+            <EditText
+                android:id="@+id/actualDP"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_below="@+id/actualHR"
+                android:layout_marginLeft="12dp"
+                android:inputType="textPersonName"
+                android:hint="Actual Diastolic BP"/>
+
+            <EditText
+                android:id="@+id/actualSP"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_below="@+id/actualDP"
+                android:layout_marginLeft="12dp"
+                android:inputType="textPersonName"
+                android:hint="Actual Systolic BP"/>
+
+
             <Button
                 android:id="@+id/Continue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Continue"
-                android:layout_below="@+id/radiogroup"
+                android:layout_below="@+id/actualSP"
                 android:layout_centerHorizontal="true"/>
         </RelativeLayout>
     </ScrollView>

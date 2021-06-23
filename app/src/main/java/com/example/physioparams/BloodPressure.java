@@ -59,7 +59,7 @@ public class BloodPressure extends AppCompatActivity {
     public int counter = 0;
 
     String name,mobile;
-    public int height,weight,age,gender;
+    public int userHeight,weight,age,gender,actualHR,actualDP,actualSP;
 
     public double Q = 4.5;
     private static int SP = 0, DP = 0;
@@ -75,9 +75,14 @@ public class BloodPressure extends AppCompatActivity {
             name = intent.getStringExtra("Name");
             mobile = intent.getStringExtra("Mobile");
             age = intent.getIntExtra("Age",0);
-            height = intent.getIntExtra("Height",0);
+            userHeight = intent.getIntExtra("Height",0);
             weight = intent.getIntExtra("Weight",0);
             gender = intent.getIntExtra("Gender",1);
+            actualHR = intent.getIntExtra("ActualHR",0);
+            actualDP = intent.getIntExtra("ActualDP",0);
+            actualSP = intent.getIntExtra("ActualSP",0);
+
+            Log.i("Age",""+age);
         }
         Log.e("Started","Application started");
 
@@ -248,6 +253,16 @@ public class BloodPressure extends AppCompatActivity {
                 intent.putExtra("DP",DP);
                 intent.putExtra("SP",SP);
                 intent.putExtra("HR",Beats);
+                intent.putExtra("Name",name);
+                intent.putExtra("Mobile",mobile);
+                intent.putExtra("Age",age);
+                intent.putExtra("Height",userHeight);
+                intent.putExtra("Weight",weight);
+                intent.putExtra("Gender",gender);
+                intent.putExtra("ActualHR",actualHR);
+                intent.putExtra("ActualDP",actualDP);
+                intent.putExtra("ActualSP",actualSP);
+
                 startActivity(intent);
                 finish();
             }
