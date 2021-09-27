@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ff000000">
+
+    <TextView
+        android:id="@+id/textheading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:text="Warning !!"
+        android:textColor="#ffff0000"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Please take measurement from this app and any hardware device at the same time."
+        android:textColor="#ffaaaaaa"
+        android:textSize="20sp"
+        android:id="@+id/t1"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/textheading"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginTop="10dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Kindly attach the strap of hardware device on the hand and then start measurement using both the techniques simultaneously."
+        android:textColor="#ffaaaaaa"
+        android:textSize="20sp"
+        android:id="@+id/t2"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/t1"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/t2"
+        android:layout_margin="30dp"
+        android:id="@+id/b1"
+        android:text="Continue"
+        android:background="#ffff0000"
+        android:backgroundTint="#ffff0000"/>
+
+</RelativeLayout>

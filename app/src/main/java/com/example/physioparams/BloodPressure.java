@@ -17,7 +17,12 @@ import android.os.PowerManager;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -25,6 +30,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import com.example.physioparams.Math.Fft;
 
 import static java.lang.Math.ceil;
+import static java.lang.Math.toIntExact;
 
 public class BloodPressure extends AppCompatActivity {
     private static final String TAG = "HeartRateMonitor";
@@ -69,6 +75,10 @@ public class BloodPressure extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_blood_pressure);
+        Window window = this.getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.setStatusBarColor(this.getResources().getColor(R.color.statusbarcolour));
         Intent intent = getIntent();
         if(intent != null)
         {
@@ -78,9 +88,8 @@ public class BloodPressure extends AppCompatActivity {
             userHeight = intent.getIntExtra("Height",0);
             weight = intent.getIntExtra("Weight",0);
             gender = intent.getIntExtra("Gender",1);
-            actualHR = intent.getIntExtra("ActualHR",0);
-            actualDP = intent.getIntExtra("ActualDP",0);
-            actualSP = intent.getIntExtra("ActualSP",0);
+            if(gender == 1)
+                Q = 5.0;
 
             Log.i("Age",""+age);
         }
@@ -121,6 +130,7 @@ public class BloodPressure extends AppCompatActivity {
             Log.e("preview created", "here1");
             previewHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
             ProgHeart = findViewById(R.id.HRPB);
+            ProgHeart.setMax(50);
             ProgHeart.setProgress(0);
         }catch (Error e){
             Log.e("error", "error"+e);
@@ -187,21 +197,53 @@ public class BloodPressure extends AppCompatActivity {
 
 
             //To check if we got a good red intensity to process if not return to the condition and set it again until we get a good red intensity
-            if (RedAvg < 200) {
+            if (RedAvg < 180) {
                 inc = 0;
                 ProgP = inc;
                 counter = 0;
                 ProgHeart.setProgress(ProgP);
                 processing.set(false);
+                RedAvgList.clear();
+                GreenAvgList.clear();
                 startTime = System.currentTimeMillis();
+
+                TextView tv1 = (TextView) findViewById(R.id.textprogress);
+                tv1.setText("0%");
+                TextView tinfo1 = (TextView)findViewById(R.id.textinfo1);
+                TextView tinfo2 = (TextView)findViewById(R.id.textinfo2);
+                tinfo1.setText("Finger not detected");
+                tinfo2.setText("Place your finger correctly");
+                TextView tinfo3 = (TextView)findViewById(R.id.textinfo3);
+                tinfo3.setText("");
+                RedAvgList.clear();
+                GreenAvgList.clear();
+                startTime = System.currentTimeMillis();
+            }
+
+            else
+            {
+                TextView tinfo1 = (TextView)findViewById(R.id.textinfo1);
+                TextView tinfo2 = (TextView)findViewById(R.id.textinfo2);
+                tinfo1.setText("Finger Detected !!");
+                tinfo2.setText("Measurement in progress...");
             }
 
             long endTime = System.currentTimeMillis();
             double totalTimeInSecs = (endTime - startTime) / 1000d; //to convert time to seconds
             if (totalTimeInSecs >= 30) { //when 30 seconds of measuring passes do the following " we chose 30 seconds to take half sample since 60 seconds is normally a full sample of the heart beat
 
+//                Double[] Green = new Double[GreenAvgList.size()-60];
+//                Double[] Red = new Double[RedAvgList.size()-60];
+//                for(int i=60;i<GreenAvgList.size();i++)
+//                    Green[i] = GreenAvgList.get(i);
+//
+//                for(int i=60;i<RedAvgList.size();i++)
+//                        Red[i]=RedAvgList.get(i);
                 Double[] Green = GreenAvgList.toArray(new Double[GreenAvgList.size()]);
                 Double[] Red = RedAvgList.toArray(new Double[RedAvgList.size()]);
+                System.out.println("Red"+RedAvgList.size());
+                System.out.println("Green"+GreenAvgList.size());
+                System.out.println("Counter"+counter);
 
                 SamplingFreq = (counter / totalTimeInSecs); //calculating the sampling frequency
 
@@ -259,9 +301,6 @@ public class BloodPressure extends AppCompatActivity {
                 intent.putExtra("Height",userHeight);
                 intent.putExtra("Weight",weight);
                 intent.putExtra("Gender",gender);
-                intent.putExtra("ActualHR",actualHR);
-                intent.putExtra("ActualDP",actualDP);
-                intent.putExtra("ActualSP",actualSP);
 
                 startActivity(intent);
                 finish();
@@ -269,8 +308,38 @@ public class BloodPressure extends AppCompatActivity {
 
             if (RedAvg != 0) { //increment the progresspar
 
-                ProgP = inc++ / 34;
+                ProgP = counter/18;
                 ProgHeart.setProgress(ProgP);
+
+                if(counter%18==0) {
+                    TextView tv1 = (TextView) findViewById(R.id.textprogress);
+                    ImageView iv1 = (ImageView) findViewById(R.id.i1);
+                    ImageView iv2 = (ImageView) findViewById(R.id.i2);
+                    ImageView iv3 = (ImageView)findViewById(R.id.i3);
+                    tv1.setText(2*ProgP+"%");
+
+                    if(iv1.getVisibility() == View.VISIBLE && iv2.getVisibility() == View.VISIBLE && iv3.getVisibility() == View.VISIBLE)
+                    {
+                        iv1.setVisibility(View.INVISIBLE);
+                        iv2.setVisibility(View.INVISIBLE);
+                        iv3.setVisibility(View.INVISIBLE);
+                    }
+                        //iv2.setVisibility((View.VISIBLE));
+                    else if(iv1.getVisibility() == View.VISIBLE && iv2.getVisibility() == View.VISIBLE)
+                    {
+                        iv3.setVisibility(View.VISIBLE);
+                    }
+                    else if(iv1.getVisibility() == View.VISIBLE)
+                        iv2.setVisibility(View.VISIBLE);
+                    else
+                        iv1.setVisibility(View.VISIBLE);
+                }
+
+                if(counter>250)
+                {
+                    TextView tinfo3 = (TextView)findViewById(R.id.textinfo3);
+                    tinfo3.setText("Glad to see you taking the measurement!!");
+                }
             }
 
             //keeps taking frames tell 30 seconds
